@@ -1,4 +1,4 @@
-// Write a function to format money string:
+// 1. Write a function to format money string:
 // Example: 10000000 => “10,000,000" || 123456 => “123,456" || 12000.02 => "12,000.02"
 
 function formatMoneyString(money) {
