@@ -218,3 +218,41 @@ teams.forEach(team => {
     console.log(`\n------------------------------------------ TEAM ${teams.indexOf(team) + 1} ------------------------------------------`);
     team.displayTeam();
 });
+
+const rl = require('readline').createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+function ask(question) {
+    return new Promise((resolve) => {
+        rl.question(question, (answer) => {
+            resolve(answer);
+        });
+    });
+}
+const checkTeam = (id1, id2, id3) => {
+    const team = teams.filter(team => {
+        const member1 = team.members[0];
+        const member2 = team.members[1];
+        const member3 = team.members[2];
+        if (member1.id === id1 && member2.id === id2 && member3.id === id3) {
+            return true;
+        }
+        return false;
+    });
+    if (team.length > 0) {
+        console.log(`\nThey can play together as TEAM ${teams.indexOf(team[0]) + 1}`);
+        team[0].displayTeam();
+    } else {
+        console.log(`\nThey cannot play together`);
+    }
+}
+
+(async () => {
+    console.log("\n\nInput ID of 3 team members to check if they can play together");
+    const id1 = await ask("Enter ID of first member: ");
+    const id2 = await ask("Enter ID of second member: ");
+    const id3 = await ask("Enter ID of third member: ");
+    checkTeam(Number(id1), Number(id2), Number(id3));
+    rl.close();
+})();
