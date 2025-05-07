@@ -1,4 +1,4 @@
-# Day 02 Exercise
+# Day 02 Exercise - 07/05/2025
 ## Exercise 1
 1. Write a function to format money string: Example: 10000000 => “10,000,000" || 123456 => “123,456" || 12000.02 => "12,000.02"
 2. Write a function for format money in shorten (1000 => 1K, 1123400000 => 1.12B , 1342222 => 1.34M)
