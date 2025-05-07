@@ -17,7 +17,7 @@ Build A Student Management Application With The Following Features:
 6. Save The Student List To A File (JSON)
 7. Load The Student List From File On Startup
 The Application Should Have A Command-Line Interface That Allows Users To Select Functions Through An Interactive Menu.
-## Set up the Competition Team (Tổ chức đội thi đấu)
+## Competition Team Management (Tổ chức đội thi đấu)
 ### Một đội vận động viên có 40 người:
 - 1 người là thành viên chủ lực 
 - 5 người là đội nòng cốt 
