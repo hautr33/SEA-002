@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>MMR Simulator</title>
+</head>
+
+<body>
+  <h1>Chọn 2 người chơi</h1>
+
+  <select id="player1">
+    <% players.forEach(p=> { %>
+      <option value="<%= p.id %>">
+        <%= p.name %>
+      </option>
+      <% }) %>
+  </select>
+
+  <select id="player2">
+    <% players.forEach(p=> { %>
+      <option value="<%= p.id %>">
+        <%= p.name %>
+      </option>
+      <% }) %>
+  </select>
+
+  <button onclick="startMatch()">Bắt đầu</button>
+
+  <script>
+    function startMatch() {
+      const id1 = parseInt(document.getElementById('player1').value);
+      const id2 = parseInt(document.getElementById('player2').value);
+      if (id1 === id2) return alert("Không thể tự đấu!");
+
+      fetch('/match', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ player1Id: id1, player2Id: id2, winnerId: Math.random() < 0.5 ? id1 : id2 })
+      })
+        .then(res => res.json())
+        .then(console.log);
+    }
+  </script>
+</body>
