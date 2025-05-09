@@ -1,6 +1,15 @@
-const Database = require('better-sqlite3');
-const path = require('path');
+const mongoose = require('mongoose');
 
-const db = new Database(path.join(__dirname, '../../data/mmr.db'));
+async function connectDB() {
+    try {
+        await mongoose.connect('mongodb+srv://hautt33:ECdpk3no1nR2U3Tn@sea-002.q0vnuic.mongodb.net/riot_elo', {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        console.log('Connected to MongoDB via Mongoose!');
+    } catch (error) {
+        console.error('MongoDB Connection Error:', error);
+    }
+}
 
-module.exports = db;
+module.exports = connectDB;

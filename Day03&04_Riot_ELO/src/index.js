@@ -1,68 +1,52 @@
 const express = require('express');
-const path = require('path');
-const app = express();
+const { join } = require('path');
+const { json, urlencoded, static: staticFiles } = require('express');
 
+const connectDB = require('./config/db');
+
+const playerRoutes = require('./routes/playerRoutes');
 const matchRoutes = require('./routes/matchRoutes');
-const { loadPlayers } = require('./services/playerService');
-const { getHistory } = require('./services/historyService');
+const historyRoutes = require('./routes/historyRoutes');
 
-// ===== Middleware =====
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const { findAllPlayers } = require('./services/playerServices');
+const { simulateRandomMatchesWithPlayer } = require('./controllers/matchController');
 
-// ===== View engine: EJS =====
-app.set('views', path.join(__dirname, '../views'));
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(json());
+app.use(urlencoded({ extended: true }));
+
+app.set('views', join(__dirname, '../views'));
 app.set('view engine', 'ejs');
 
-// ===== Static assets =====
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(staticFiles(join(__dirname, '../public')));
 
-// ===== Route: Trang chủ =====
-app.get('/', async (req, res) => {
-    const players = await loadPlayers(); // từ mmrService
-    res.render('index', { players });
-});
+async function startServer() {
+  await connectDB();
 
-// ===== API Routes =====
-app.use('/match', matchRoutes);
+  app.use('/api/players', playerRoutes);
+  app.use('/api/matches', matchRoutes);
+  app.use('/api/histories', historyRoutes);
 
-// ===== API get all players =====
-app.get('/players', (req, res) => {
-    res.json(loadPlayers());
-});
-
-app.get('/history', (req, res) => {
-    const history = getHistory();
-  
-    res.send(`
-      <html>
-        <head>
-          <title>Lịch sử trận đấu</title>
-          <style>
-            body {
-              font-family: monospace;
-              background: #f9f9f9;
-              padding: 20px;
-            }
-            pre {
-              white-space: pre-wrap;
-              background: #fff;
-              padding: 20px;
-              border-radius: 8px;
-              box-shadow: 0 0 6px rgba(0,0,0,0.1);
-            }
-          </style>
-        </head>
-        <body>
-          <h2>📜 Lịch sử trận đấu</h2>
-          <pre>${JSON.stringify(history, null, 2)}</pre>
-        </body>
-      </html>
-    `);
+  app.get('/', async (req, res) => {
+    const players = await findAllPlayers()
+    const message = req.query.message || null;
+    res.render('index', { players, message });
   });
 
-// ===== Server start =====
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running at http://localhost:${PORT}`);
+  app.post('/', async (req, res) => {
+    const { playerId, matchCount } = req.query;
+    await simulateRandomMatchesWithPlayer(playerId, matchCount);
+    res.render('index', { players });
+  });
+
+  app.listen(PORT, () => {
+    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+  });
+}
+
+startServer().catch(err => {
+  console.error('Failed to start server:', err);
 });
+

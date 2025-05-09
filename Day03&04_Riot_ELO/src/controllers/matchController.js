@@ -1,12 +1,11 @@
-const { playSpecificMatch } = require('../services/mmrService');
-const { getHistory } = require('../services/historyService');
+const { simulateMatches, simulateMatchesWithPlayer } = require('../services/matchServices');
 
-function handleMatch(req, res) {
-  const { player1Id, player2Id, winnerId } = req.body;
-  const result = playSpecificMatch(player1Id, player2Id, winnerId);
-  if (!result) return res.status(400).json({ message: 'Trận đấu không hợp lệ.' });
-
-  res.json({ ...result, history: getHistory() });
+async function simulateRandomMatches(totalMatch) {
+  return await simulateMatches(totalMatch);
 }
 
-module.exports = { handleMatch };
+function simulateRandomMatchesWithPlayer(playerId, totalMatch) {
+  return simulateMatchesWithPlayer(playerId, totalMatch);
+}
+
+module.exports = { simulateRandomMatches, simulateRandomMatchesWithPlayer };

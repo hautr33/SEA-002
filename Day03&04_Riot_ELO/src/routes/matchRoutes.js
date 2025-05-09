@@ -1,13 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const { handleMatch } = require('../controllers/matchController');
+const { simulateRandomMatches, simulateRandomMatchesWithPlayer } = require('../controllers/matchController');
 
-const { getAllPlayers } = require('../services/mmrService');
+router.post('/random', async (req, res) => {
+    const { matchCount } = req.body;
+    const message = await simulateRandomMatches(matchCount);
+    res.redirect('/?message=' + encodeURIComponent(message));
 
-router.post('/', handleMatch);
+    // const message = await simulateRandomMatches(matchCount);
+    // res.setHeader('Content-Type', 'application/json');
+    // res.json({
+    //     message: message
+    // });
+}
+);
 
-router.get('/players', (req, res) => {
-    res.json(getAllPlayers());
+router.post('/player', async (req, res) => {
+    const { playerId, matchCount } = req.body;
+    const message = await simulateRandomMatchesWithPlayer(playerId, matchCount);
+    res.redirect('/?message=' + encodeURIComponent(message));
+
+    // const message = await simulateRandomMatchesWithPlayer(playerId, matchCount);
+    // res.setHeader('Content-Type', 'application/json');
+    // res.json({
+    //     message: message
+    // });
 });
 
 module.exports = router;

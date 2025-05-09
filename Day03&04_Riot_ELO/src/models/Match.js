@@ -1,42 +1,102 @@
-class Match {
-    constructor(playerA, playerB, winnerId, kFactor = 32) {
-        this.playerA = playerA;
-        this.playerB = playerB;
-        this.k = kFactor;
-        this.winnerId = winnerId;
+const History = require('./History');
+const PlayerModel = require('./PlayerModel');
+
+class TeamMatch {
+    constructor(teamA, teamB, winnerTeam) {
+        this.teamA = teamA;
+        this.teamB = teamB;
+        this.winnerTeam = winnerTeam;
+        this.timestamp = new Date().toLocaleString();
     }
 
-    calculateExpectedScore(rA, rB) {
-        return 1 / (1 + Math.pow(10, (rB - rA) / 400));
+    getAverageELO(team) {
+        return team.reduce((sum, p) => sum + p.elo , 0) / team.length;
+    }
+
+    getKFactor(rank) {
+        if (rank <= 2) return 40; 
+        if (rank === 3) return 32;
+        return 24;
+    }
+
+    calculateExpectedScore(avgA, avgB) {
+        return 1 / (1 + Math.pow(10, (avgB - avgA) / 400));
     }
 
     calculateLPChange(player, win) {
-        const base = 20;
-        const bonus = Math.floor((player.mmr - 1500) / 100);
-        return win ? base + bonus : -15 - bonus;
+        const eloBonus = Math.floor((player.elo - 1500) / 100);
+
+        if (win) {
+            return 20 + eloBonus;
+        } else {
+            return -15 - eloBonus;
+        }
     }
 
-    play() {
-        const E_A = this.calculateExpectedScore(this.playerA.mmr, this.playerB.mmr);
-        const E_B = 1 - E_A;
+    async play() {
+        const avgA = this.getAverageELO(this.teamA);
+        const avgB = this.getAverageELO(this.teamB);
 
-        const S_A = this.winnerId === this.playerA.id ? 1 : 0;
-        const S_B = 1 - S_A;
+        const E_A = this.calculateExpectedScore(avgA, avgB);
+        const S_A = this.winnerTeam === 'Team A' ? 1 : 0;
 
-        const deltaA = Math.round(this.k * (S_A - E_A));
-        const deltaB = Math.round(this.k * (S_B - E_B));
+        const teamAHistory = await Promise.all(
+            this.teamA.map(async player => {
+                const lpChange = this.calculateLPChange(player, S_A === 1);
+                const before = { elo: player.elo, lp: player.lp, rank: player.rank };
 
-        const lpA = this.calculateLPChange(this.playerA, S_A === 1);
-        const lpB = this.calculateLPChange(this.playerB, S_B === 1);
+                const eloChange = Math.round(this.getKFactor(player.rank) * (S_A - E_A));
 
-        this.playerA.applyMatchResult(deltaA, lpA);
-        this.playerB.applyMatchResult(deltaB, lpB);
+                await player.applyMatchResult(eloChange, lpChange);
 
-        return {
-            playerA: { id: this.playerA.id, mmr: this.playerA.mmr, lp: this.playerA.lp, rank: this.playerA.rank },
-            playerB: { id: this.playerB.id, mmr: this.playerB.mmr, lp: this.playerB.lp, rank: this.playerB.rank }
-        };
+
+                return {
+                    id: player.id,
+                    name: player.name,
+                    beforeELO: before.elo,
+                    eloChange: eloChange,
+                    afterELO: player.elo,
+                    beforeLP: before.lp,
+                    lpChange: lpChange,
+                    afterLP: player.lp,
+                    beforeRank: before.rank,
+                    afterRank: player.rank
+                };
+            }));
+
+        const teamBHistory = await Promise.all(
+            this.teamB.map(async player => {
+                const lpChange = this.calculateLPChange(player, S_A === 0);
+                const before = { elo: player.elo, lp: player.lp, rank: player.rank };
+
+                const eloChange = -Math.round(this.getKFactor(player.rank) * (S_A - E_A));
+
+                await player.applyMatchResult(eloChange, lpChange);
+
+                return {
+                    id: player.id,
+                    name: player.name,
+                    beforeELO: before.elo,
+                    eloChange: eloChange,
+                    afterELO: player.elo,
+                    beforeLP: before.lp,
+                    lpChange: lpChange,
+                    afterLP: player.lp,
+                    beforeRank: before.rank,
+                    afterRank: player.rank
+                };
+            }));
+        const history = new History({
+            timestamp: this.timestamp,
+            winner: this.winnerTeam,
+            teamA: teamAHistory,
+            teamB: teamBHistory
+        });
+
+        await history.saveToDB();
+
+        return history;
     }
 }
 
-module.exports = Match;  
+module.exports = TeamMatch;

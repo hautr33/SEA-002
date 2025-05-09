@@ -1,21 +1,35 @@
+const HistoryModel = require('./HistoryModel');
+
 class History {
-    constructor({ winnerId, playerA, playerB, mmrChangeA, mmrChangeB, lpChangeA, lpChangeB }) {
-      this.timestamp = new Date().toLocaleString();
-      this.playerA = playerA.name;
-      this.playerB = playerB.name;
-      this.winner = winnerId === playerA.id ? playerA.name : playerB.name;
-  
-      this.mmrChangeA = mmrChangeA;
-      this.mmrChangeB = mmrChangeB;
-      this.lpChangeA = lpChangeA;
-      this.lpChangeB = lpChangeB;
-  
-      this.mmrA = playerA.mmr;
-      this.mmrB = playerB.mmr;
-      this.lpA = playerA.lp;
-      this.lpB = playerB.lp;
+  constructor({ timestamp, winner, teamA, teamB }) {
+    this.timestamp = timestamp;
+    this.winner = winner;
+    this.teamA = teamA;
+    this.teamB = teamB;
+  }
+
+  toJSON() {
+    return JSON.stringify({
+      timestamp: this.timestamp,
+      winner: this.winner,
+      teamA: this.teamA,
+      teamB: this.teamB
+    }, null, 2);
+  }
+
+  async saveToDB() {
+    try {
+      const result = await HistoryModel.create({
+        timestamp: this.timestamp,
+        winner: this.winner,
+        teamA: this.teamA,
+        teamB: this.teamB
+      });
+      console.log(`History saved to MongoDB with _id: ${result._id}`);
+    } catch (error) {
+      console.error('Error saving history to DB:', error);
     }
   }
-  
-  module.exports = History;
-  
+}
+
+module.exports = History;
