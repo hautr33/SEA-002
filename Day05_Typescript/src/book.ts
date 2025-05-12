@@ -2,20 +2,15 @@ import { BookStatus } from "./util";
 
 interface IBook {
     id: number | null;
-    title: string;
-    author: string;
-    year: number;
-    genre: string;
-    status: BookStatus;
 }
 
 export class Book implements IBook {
     id: number | null =null;
-    title: string;
-    author: string;
-    year: number;
-    genre: string;
-    status: BookStatus = 'Available';
+    private title: string;
+    private author: string;
+    private year: number;
+    private genre: string;
+    private status: BookStatus = 'Available';
 
     constructor(title: string, author: string, year: number, genre: string) {
         this.title = title;

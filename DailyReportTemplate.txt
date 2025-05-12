@@ -7,6 +7,16 @@ II. NOTE
 III. REMAINING
 
 
+========12/05=========
+I.SUMMARY:
+- Riot ELO System (Done)
+- Library Management (Done)
+II. NOTE
+- Repo Riot ELO: https://github.com/hautr33/SEA-002/tree/main/Day03%2604_Riot_ELO
+- Repo Library Management: https://github.com/hautr33/SEA-002/tree/main/Day05_Typescript
+III. REMAINING
+- Chưa áp dụng được Intersection Type, Generic Type, Utility Type, Type Assertion
+
 Connect to SEA-002
 hautt33
 ECdpk3no1nR2U3Tn
