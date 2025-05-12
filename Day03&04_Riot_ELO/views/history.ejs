@@ -40,14 +40,18 @@
                         <h5 class="card-title text-primary mb-3">👤 Player Information</h5>
                     </div>
                     <div class="col-md-4 col-sm-6 mb-2">
-                        <span class="text-muted">ID:</span> <strong>
-                            <%= selectedPlayer.id %>
-                        </strong>
-                    </div>
-                    <div class="col-md-4 col-sm-6 mb-2">
                         <span class="text-muted">Name:</span> <strong>
                             <%= selectedPlayer.name %>
                         </strong>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <span class="text-muted">Rank:</span>
+                        <span class="badge bg-success">
+                            <%= selectedPlayer.rank===1 ? 'Bronze 🧱' : selectedPlayer.rank===2 ? 'Silver 🛡' :
+                                selectedPlayer.rank===3 ? 'Gold ⚔️' : selectedPlayer.rank===4 ? 'Platinum 🏆' :
+                                selectedPlayer.rank===5 ? 'Diamond 👑' : selectedPlayer.rank===6 ? 'Master 🐉'
+                                : 'Challenger 🌟' %>
+                        </span>
                     </div>
                     <div class="col-md-4 col-sm-6 mb-2">
                         <span class="text-muted">ELO:</span>
@@ -56,18 +60,15 @@
                         </span>
                     </div>
                     <div class="col-md-4 col-sm-6 mb-2">
-                        <span class="text-muted">Rank:</span>
-                        <span class="badge bg-success">
-                            <%= selectedPlayer.rank===1 ? 'Bronze 🧱' : selectedPlayer.rank===2 ? 'Silver 🛡' :
-                                selectedPlayer.rank===3 ? 'Gold ⚔️' : selectedPlayer.rank===4 ? 'Platinum 🏆' :
-                                selectedPlayer.rank===5 ? 'Diamond 👑' : selectedPlayer.rank===6 ? 'Master 🐉'
-                                : 'Grandmaster/Challenger 🌟' %>
-                        </span>
-                    </div>
-                    <div class="col-md-4 col-sm-6 mb-2">
                         <span class="text-muted">LP:</span>
                         <span class="badge bg-warning text-dark">
                             <%= selectedPlayer.lp %>
+                        </span>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <span class="text-muted">Win Rate:</span>
+                        <span class="badge bg-warning text-dark">
+                            <%= matchInfo[2] %>% (<%= matchInfo[0] %>/<%= matchInfo[1] %>)
                         </span>
                     </div>
                 </div>

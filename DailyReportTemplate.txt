@@ -5,3 +5,8 @@ I.SUMMARY:
 II. NOTE
 - git repo : // 
 III. REMAINING
+
+
+Connect to SEA-002
+hautt33
+ECdpk3no1nR2U3Tn

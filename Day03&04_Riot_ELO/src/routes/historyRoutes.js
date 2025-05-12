@@ -22,6 +22,7 @@ router.get('/', async (req, res) => {
 
     let selectedPlayer = null;
     let histories = [];
+    let matchInfo = [];
     if (selectedPlayerId) {
         selectedPlayer = players.find(player => player.id === parseInt(selectedPlayerId));
         histories = await HistoryModel.find({
@@ -30,12 +31,20 @@ router.get('/', async (req, res) => {
                 { 'teamB.id': parseInt(selectedPlayerId) }
             ]
         }).sort({ timestamp: -1 });
+
+        let totalMatches = histories.length;
+        let totalWins = histories.filter(history => {
+            const isTeamA = history.teamA.some(p => p.id === selectedPlayerId);
+            return (isTeamA && history.winner === 'Team A') || (!isTeamA && history.winner === 'Team B');
+        }).length;
+        matchInfo = [totalWins, totalMatches, Math.round(totalWins / totalMatches * 100)];
     }
 
-    res.render('history', { 
-        players, 
-        selectedPlayer, 
-        histories 
+    res.render('history', {
+        players,
+        selectedPlayer,
+        histories,
+        matchInfo
     });
 });
 
