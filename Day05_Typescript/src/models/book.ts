@@ -1,4 +1,4 @@
-import { BookStatus } from "./util";
+import { BookStatus } from "../utils/util";
 
 interface IBookGetter {
     getId(): number | null;

@@ -1,7 +1,7 @@
-import { Book } from './book';
-import ConsoleReader from './console-reader';
-import { Library } from './library';
-import { showMenu, returnToMenu, prompt, BookStatusEnum } from './util';
+import { Book } from './models/book';
+import ConsoleReader from './utils/console-reader';
+import { Library } from './models/library';
+import { showMenu, returnToMenu, prompt, BookStatusEnum } from './utils/util';
 
 const rl = ConsoleReader.getInstance();
 
