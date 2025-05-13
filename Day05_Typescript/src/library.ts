@@ -1,6 +1,18 @@
 import { Book } from './book';
 
-export class Library {
+interface ILibrary<T> {
+    getBooks(): T[];
+
+    addBook(book: T): void;
+
+    searchBook(searchString: string): T[];
+
+    removeBook(bookId: number): boolean;
+
+    printListBook(books: T[]): void;
+}
+
+export class Library implements ILibrary<Book> {
 
     private books: Book[] = [];
     private idCount: number = 1;
