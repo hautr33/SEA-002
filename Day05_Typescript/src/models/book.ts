@@ -1,4 +1,4 @@
-import { BookStatus } from "../utils/util";
+import { BookStatus } from "../utils/book";
 
 interface IBookGetter {
     getId(): number | null;
@@ -96,5 +96,9 @@ export class Book implements IBook {
 
     toString(): string {
         return `${(this._id as number).toString().padEnd(3, ' ')} | ${this._title.padEnd(50, ' ')} | ${this._author.padEnd(30, ' ')} | ${this._year.toString().padEnd(4, ' ')} | ${this._genre.padEnd(25, ' ')} | ${this._status.padEnd(11, ' ')}`;
+    }
+
+    toStringExcludeStatus(): string {
+        return `${(this._id as number).toString().padEnd(3, ' ')} | ${this._title.padEnd(50, ' ')} | ${this._author.padEnd(30, ' ')} | ${this._year.toString().padEnd(4, ' ')} | ${this._genre.padEnd(25, ' ')}`;
     }
 }

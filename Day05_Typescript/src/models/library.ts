@@ -34,6 +34,7 @@ export class Library implements ILibrary<Book> {
         const searchResults = this.books.filter((book) => {
             return book.getTitle().toLowerCase().includes(searchString.toLowerCase())
                 || book.getAuthor().toLowerCase().includes(searchString.toLowerCase())
+                || book.getGenre().toLowerCase().includes(searchString.toLowerCase())
         })
         return searchResults;
     }

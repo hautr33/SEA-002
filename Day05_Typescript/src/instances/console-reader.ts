@@ -3,7 +3,7 @@ import * as readline from "readline";
 class ConsoleReader {
     private static instance: readline.Interface;
 
-    private constructor() {}
+    private constructor() { }
 
     public static getInstance(): readline.Interface {
         if (!ConsoleReader.instance) {
@@ -16,4 +16,4 @@ class ConsoleReader {
     }
 }
 
-export default ConsoleReader;
+export default ConsoleReader
