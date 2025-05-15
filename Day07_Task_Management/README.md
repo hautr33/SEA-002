@@ -24,6 +24,12 @@ Xây dựng một ứng dụng quản lý task và áp dụng các kiến thức
 
 ## Cấu hình và chạy ứng dụng
 **1. Cài đặt TypeScript và Dependencies**
+* better-sqlite3
+* ejs
+* express
+* nodemon
+* ts-node
+* typescript
 ```bash
 npm install i --save-dev @types/better-sqlite3 @types/ejs @types/express better-sqlite3 ejs express nodemon ts-node typescript
 ```
