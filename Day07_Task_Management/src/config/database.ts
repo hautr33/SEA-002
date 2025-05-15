@@ -10,7 +10,7 @@ db.exec(`
         priority TEXT,
         estimateTime TEXT,
         dueDate TEXT,
-        assigneeId TEXT,
+        ownerId TEXT,
         storyId TEXT
     );
 
@@ -20,7 +20,8 @@ db.exec(`
         status TEXT,
         tag TEXT,
         priority TEXT,
-        ownerId TEXT
+        ownerId TEXT,
+        sprintId TEXT
     );
 
     CREATE TABLE IF NOT EXISTS sprint (

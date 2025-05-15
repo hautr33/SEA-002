@@ -1,5 +1,7 @@
 import db from '../config/database'
+import { CountRecordsOnInit } from '../utils/decorator';
 import Enums from '../utils/enum';
+
 
 type StatusType = `${Enums.TaskStatus}`
 type PriorityType = `${Enums.TaskPriority}`
@@ -10,7 +12,7 @@ interface TaskFilter {
     status?: StatusType;
     tag?: string;
     priority?: PriorityType;
-    assigneeId?: string;
+    ownerId?: string;
     storyId?: string;
 }
 
@@ -21,10 +23,11 @@ interface TaskUpdateData {
     priority?: PriorityType;
     estimateTime?: string;
     dueDate?: string;
-    assigneeId?: string;
+    ownerId?: string;
     storyId?: string;
 }
 
+@CountRecordsOnInit('task')
 export class Task {
     private id: string;
     private name: string;
@@ -33,41 +36,74 @@ export class Task {
     private priority: PriorityType;
     private estimateTime: string;
     private dueDate: string;
-    private assigneeId: string;
+    private ownerId: string;
     private storyId: string;
-    private counter: number = 1;
+    private static counter: number;
 
-    constructor(name: string, tag: string, priority: PriorityType, estimateTime: string, dueDate: string, assigneeId: string, storyId: string) {
-        this.id = `task-${this.counter++}`;
+    constructor(name: string, tag: string, priority: PriorityType, estimateTime: string, dueDate: string, ownerId: string, storyId: string) {
+        this.id = `task-${Task.counter++}`;
         this.name = name;
         this.status = Enums.TaskStatus.ToDo;
         this.tag = tag;
         this.priority = priority;
         this.estimateTime = estimateTime;
         this.dueDate = dueDate;
-        this.assigneeId = assigneeId;
+        this.ownerId = ownerId;
         this.storyId = storyId;
     }
 
-    getId() {
+    getId(): string {
         return this.id;
     }
 
-    static generateTask() {
+    getOwnerId(): string {
+        return this.ownerId;
+    }
+
+    getStoryId(): string {
+        return this.storyId;
+    }
+
+    getEstimateTime(): string {
+        return this.estimateTime;
+    }
+
+    static getTag() {
+        const stmt = db.prepare('SELECT DISTINCT tag FROM task ORDER BY tag ASC');
+        const rows = stmt.all()
+        const tags = rows.map(row => (row as Task).tag);
+        return tags
+    }
+
+    static getStoriesId() {
+        const stmt = db.prepare('SELECT DISTINCT storyId FROM task ORDER BY storyId ASC');
+        const rows = stmt.all()
+        const storyIds = rows.map(row => (row as Task).storyId);
+        return storyIds
+    }
+
+    static getOwnersId() {
+        const stmt = db.prepare('SELECT DISTINCT ownerId FROM task ORDER BY ownerId ASC;');
+        const rows = stmt.all()
+        const ownersId = rows.map(row => (row as Task).ownerId);
+        return ownersId
+    }
+
+    static generateData() {
         const result = db.prepare('SELECT 1 FROM task LIMIT 1').get();
         const priorities: Enums.TaskPriority[] = Object.values(Enums.TaskPriority);
         const statuses: Enums.TaskStatus[] = Object.values(Enums.TaskStatus);
         if (!result) {
             for (let i = 1; i <= 20; i++) {
                 const name = `Task ${i}`;
-                const tag = i % 2 === 0 ? 'backend' : 'frontend';
+                const tag = `tag-${Math.ceil(Math.random() * 6)}`;
                 const priority = priorities[Math.floor(Math.random() * 3)]
                 const estimateTime = `${Math.ceil(Math.random() * 8)}h`;
                 const dueDate = new Date(Date.now() + i * 86400000).toISOString().split('T')[0]; // Today + i day
-                const assigneeId = `user-${Math.ceil(Math.random() * 5)}`;
-                const storyId = `story-${Math.ceil(Math.random() * 3)}`;
+                const ownerId = `user-${Math.ceil(Math.random() * 10)}`;
+                const storyId = `story-${Math.ceil(Math.random() * 5)}`;
 
-                const task = new Task(name, tag, priority, estimateTime, dueDate, assigneeId, storyId);
+                const task = new Task(name, tag, priority, estimateTime, dueDate, ownerId, storyId);
                 task.status = statuses[Math.floor(Math.random() * 3)]
                 task.save()
             }
@@ -77,23 +113,23 @@ export class Task {
     save() {
         const stmt = db.prepare(`
             INSERT OR REPLACE INTO task 
-            (id, name, status, tag, priority, estimateTime, dueDate, assigneeId, storyId) 
+            (id, name, status, tag, priority, estimateTime, dueDate, ownerId, storyId) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         `);
         stmt.run(
             this.id, this.name, this.status, this.tag,
-            this.priority, this.estimateTime, this.dueDate, this.assigneeId, this.storyId
+            this.priority, this.estimateTime, this.dueDate, this.ownerId, this.storyId
         );
     }
 
-    static findTask(filter?: TaskFilter): Task[] {
+    static find(filter?: TaskFilter): Task[] {
         let sql = 'SELECT * FROM task';
         const conditions: string[] = [];
         const params: any[] = [];
         if (filter) {
 
             for (const [key, value] of Object.entries(filter)) {
-                if (key === 'name') {
+                if (key === 'name' || key === 'tag') {
                     conditions.push(`${key} LIKE ?`);
                     params.push(`%${value}%`);
                 }
@@ -147,7 +183,7 @@ export class Task {
         return stmt.all(...params) as Task[];
     }
 
-    static updateTask(id: string, updates: TaskUpdateData): boolean {
+    static update(id: string, updates: TaskUpdateData): boolean {
         if (!updates || Object.keys(updates).length === 0) {
             console.log('Dont have field to update.');
             return false;
@@ -170,7 +206,7 @@ export class Task {
         return result.changes > 0;
     }
 
-    static deleteTask(id: string): boolean {
+    static delete(id: string): boolean {
         const stmt = db.prepare('DELETE FROM task WHERE id = ?');
         const result = stmt.run(id);
 
