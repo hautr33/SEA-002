@@ -9,10 +9,10 @@ File: `src/core/Component.ts`
 - Holds a reference to its owning Entity.
 
 Properties:
-- `owner: Entity | null` — Reference to the entity this component is attached to.
+- `owner: Entity | null` - Reference to the entity this component is attached to.
 
 Methods:
-- `abstract update(dt: number): void` — Called every frame and implement logic.
+- `abstract update(dt: number): void` - Called every frame and implement logic.
 
 ### 2. Entity
 File: `src/core/Entity.ts`
@@ -28,16 +28,16 @@ File: `src/core/World.ts`
 - Manages all entities in the game world.
 
 Methods:
-- `addEntity(entity: Entity)` — Adds an entity to the world.
-- `update(dt: number)` — Updates all entities.
+- `addEntity(entity: Entity)` - Adds an entity to the world.
+- `update(dt: number)` - Updates all entities.
 
 ### 4. SpriteComponent
 File: `src/components/SpriteComponent.ts`
 - Handles rendering animated sprites on a canvas.
 
 Properties:
-- `x, y` — Position of the sprite.
-- `width, height` — Size of the sprite.
+- `x, y` - Position of the sprite.
+- `width, height` - Size of the sprite.
 
 Methods:
 - `addAnimation(name: string, src: string, frameCount: number, frameDuration?: number)` - Adds a new animation with a sprite sheet.
@@ -57,5 +57,5 @@ new ButtonComponent(label: string, onClick: () => void, x: number, y: number)
 - `x, y` - Position of the button.
 
 Properties:
-- `x, y` — Position of the sprite.
-- `width, height` — Size of the sprite.
+- `x, y` - Position of the sprite.
+- `width, height` - Size of the sprite.
