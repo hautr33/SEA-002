@@ -1,34 +1,24 @@
-# Node.js dependencies
-node_modules/
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
+lerna-debug.log*
 
-# Build outputs
-dist/
-build/
-out/
+node_modules
+dist
+dist-ssr
+*.local
 
-# TypeScript cache & compiled files
-*.tsbuildinfo
-
-# Environment variables & Secrets
-.env
-.env.local
-.env.*.local
-
-# OS-specific files
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
-Thumbs.db
-
-# IDE settings
-.vscode/
-.idea/
-
-# Optional: Ignore coverage reports (if using testing tools)
-coverage/
-
-# Optional: Ignore logs
-logs/
-*.log
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
