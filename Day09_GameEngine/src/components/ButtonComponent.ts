@@ -15,5 +15,5 @@ export class ButtonComponent extends Component {
     document.body.appendChild(button);
   }
 
-  update(dt: number): void {}
+  update(dt: number): void { }
 }

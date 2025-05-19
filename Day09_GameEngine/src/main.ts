@@ -19,9 +19,9 @@ sprite.x = canvas.width / 2 - sprite.width / 2;
 sprite.y = canvas.height - sprite.height;
 world.addEntity(player);
 
-sprite.addAnimation("idle", "/assets/player/idle.png", 18, 100);
-sprite.addAnimation("run", "/assets/player/run.png", 12, 100);
-sprite.addAnimation("run-left", "/assets/player/run-left.png", 12, 100);
+sprite.addAnimation("idle", "/assets/player/idle.png", 18, 33);
+sprite.addAnimation("run", "/assets/player/run.png", 12, 33);
+sprite.addAnimation("run-left", "/assets/player/run-left.png", 12, 33);
 
 let isMoving = false;
 let isMoveLeft = false;
