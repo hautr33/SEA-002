@@ -23,8 +23,8 @@ sprite.addAnimation("idle", "/assets/player/idle.png", 18, 100);
 sprite.addAnimation("run", "/assets/player/run.png", 12, 100);
 sprite.addAnimation("run-left", "/assets/player/run-left.png", 12, 100);
 
-let isMoving = false
-let isMoveLeft = false
+let isMoving = false;
+let isMoveLeft = false;
 let bgOffsetX = 0;
 const moveStep = 5;
 
@@ -46,20 +46,35 @@ window.addEventListener("keyup", (e) => {
   }
 });
 
-new ButtonComponent("←", () => {
-  isMoveLeft = true;
-  isMoving = true;
-}, canvas.width - 250, canvas.height - 50);
+new ButtonComponent(
+  "←",
+  () => {
+    isMoveLeft = true;
+    isMoving = true;
+  },
+  canvas.width - 250,
+  canvas.height - 50
+);
 
-new ButtonComponent("Stop", () => {
-  isMoveLeft = false;
-  isMoving = false;
-}, canvas.width - 175, canvas.height - 50);
+new ButtonComponent(
+  "Stop",
+  () => {
+    isMoveLeft = false;
+    isMoving = false;
+  },
+  canvas.width - 175,
+  canvas.height - 50
+);
 
-new ButtonComponent("→", () => {
-  isMoveLeft = false;
-  isMoving = true;
-}, canvas.width - 85, canvas.height - 50);
+new ButtonComponent(
+  "→",
+  () => {
+    isMoveLeft = false;
+    isMoving = true;
+  },
+  canvas.width - 85,
+  canvas.height - 50
+);
 
 function gameLoop(currentTime: number) {
   const dt = currentTime - lastTime;
