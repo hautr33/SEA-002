@@ -65,7 +65,7 @@ function gameLoop(currentTime: number) {
   const dt = currentTime - lastTime;
   lastTime = currentTime;
 
-  const ctx = SpriteComponent.getContext();
+  const context = SpriteComponent.getContext();
   if (isMoving) {
     if (isMoveLeft) {
       sprite.playAnimation("run-left");
@@ -77,8 +77,8 @@ function gameLoop(currentTime: number) {
   } else {
     sprite.playAnimation("idle");
   }
-  if (ctx && bgImage.complete) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  if (context && bgImage.complete) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
 
     const imgAspect = bgImage.width / bgImage.height;
     const targetHeight = canvas.height;
@@ -88,7 +88,7 @@ function gameLoop(currentTime: number) {
     if (startX > 0) startX -= targetWidth;
 
     for (let x = startX; x < canvas.width; x += targetWidth) {
-      ctx.drawImage(bgImage, x, 0, targetWidth, targetHeight);
+      context.drawImage(bgImage, x, 0, targetWidth, targetHeight);
     }
 
     world.update(dt);

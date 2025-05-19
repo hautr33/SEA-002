@@ -41,21 +41,21 @@ export class SpriteComponent extends Component {
     }
 
     update(dt: number): void {
-        const ctx = SpriteComponent.getContext();
-        const anim = this.animations.get(this.currentAnimation);
+        const context = SpriteComponent.getContext();
+        const animation = this.animations.get(this.currentAnimation);
 
-        if (!ctx || !anim || !anim.image.complete) return;
+        if (!context || !animation || !animation.image.complete) return;
 
         this.elapsedTime += dt;
-        if (this.elapsedTime >= anim.frameDuration) {
-            this.currentFrame = (this.currentFrame + 1) % anim.frameCount;
+        if (this.elapsedTime >= animation.frameDuration) {
+            this.currentFrame = (this.currentFrame + 1) % animation.frameCount;
             this.elapsedTime = 0;
         }
 
-        ctx.drawImage(
-            anim.image,
-            this.currentFrame * anim.frameWidth, 0,
-            anim.frameWidth, anim.image.height,
+        context.drawImage(
+            animation.image,
+            this.currentFrame * animation.frameWidth, 0,
+            animation.frameWidth, animation.image.height,
             this.x, this.y,
             this.width, this.height
         );
