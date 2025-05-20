@@ -1,0 +1,38 @@
+# Bỏ qua node_modules trong tất cả thư mục con
+**/node_modules/
+
+# Bỏ qua dist và build folder
+**/dist/
+**/build/
+
+# Bỏ qua file .env ở mọi nơi
+**/.env
+
+# Bỏ qua các file hệ thống
+**/.DS_Store
+**/Thumbs.db
+
+# Bỏ qua thư mục cụ thể
+projectC/temp_output/
+
+
+# Cocos
+**/build/
+**/temp/
+**/local/
+**/library/
+**/jsb-link/
+**/jsb-adapter/
+**/simulator/
+**/native/
+**/packages/.cache/
+
+**/*.apk
+**/*.ipa
+
+**/*.log
+
+**/.vscode/
+**/.idea/
+**/.settings/
+**/*.iml

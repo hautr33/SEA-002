@@ -7,13 +7,16 @@ II. NOTE
 III. REMAINING
 
 
-========15/05=========
+========20/05=========
+Trần Trung Hậu
+
 I.SUMMARY:
-- Task Management (Done)
+- Task Game Lobby (Done)
+
 II. NOTE
-- Repo Task Management: https://github.com/hautr33/SEA-002/tree/main/Day07_Task_Management
+- Repo Task Management: https://github.com/hautr33/SEA-002/tree/main/Day10_Cocos
+
 III. REMAINING
-- Future feature: quản lý Story và Sprint.
 
 Connect to SEA-002
 hautt33
