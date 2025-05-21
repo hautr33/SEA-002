@@ -1,0 +1,25 @@
+========DD/MM=========
+I.SUMMARY:
+- Exercise 2 (Done)
+- Exercise 3 (Doing) (50%)
+II. NOTE
+- git repo : // 
+III. REMAINING
+
+
+========20/05=========
+Trần Trung Hậu
+
+I.SUMMARY:
+- Task Game Lobby (Done)
+
+II. NOTE
+- Repo Task Management: https://github.com/hautr33/SEA-002/tree/main/Day10_Cocos
+
+III. REMAINING
+
+Connect to SEA-002
+hautt33
+ECdpk3no1nR2U3Tn
+
+PBD1VLJ5S7AF5QPYMTTHXNLB

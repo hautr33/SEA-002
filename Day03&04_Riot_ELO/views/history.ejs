@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Player Match History</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container py-5">
+        <h1 class="text-center mb-4">🎮 Player Matches History</h1>
+        <div class="text-center my-4">
+            <a href="/" class="btn btn-secondary btn-lg">Simulate Matches</a>
+            <a href="/api/histories" class="btn btn-secondary btn-lg">Player Matches History</a>
+        </div>
+
+        <!-- Player Selection Form -->
+        <form action="/api/histories" method="GET" class="row g-3 align-items-center mb-4">
+            <div class="col-auto">
+                <select class="form-select" name="playerId" required>
+                    <% players.forEach(player=> { %>
+                        <option value="<%= player.id %>" <%=selectedPlayer.id==player.id ? 'selected' : '' %>>
+                            <%= player.name %> (ELO: <%= player.elo %>)
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Search History</button>
+            </div>
+        </form>
+
+        <!-- Player Information -->
+        <% if (selectedPlayer) { %>
+            <div class="card p-4 mb-4 shadow-sm">
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <h5 class="card-title text-primary mb-3">👤 Player Information</h5>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <span class="text-muted">Name:</span> <strong>
+                            <%= selectedPlayer.name %>
+                        </strong>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <span class="text-muted">Rank:</span>
+                        <span class="badge bg-success">
+                            <%= selectedPlayer.rank===1 ? 'Bronze 🧱' : selectedPlayer.rank===2 ? 'Silver 🛡' :
+                                selectedPlayer.rank===3 ? 'Gold ⚔️' : selectedPlayer.rank===4 ? 'Platinum 🏆' :
+                                selectedPlayer.rank===5 ? 'Diamond 👑' : selectedPlayer.rank===6 ? 'Master 🐉'
+                                : 'Challenger 🌟' %>
+                        </span>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <span class="text-muted">ELO:</span>
+                        <span class="badge bg-info text-dark">
+                            <%= selectedPlayer.elo %>
+                        </span>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <span class="text-muted">LP:</span>
+                        <span class="badge bg-warning text-dark">
+                            <%= selectedPlayer.lp %>
+                        </span>
+                    </div>
+                    <div class="col-md-4 col-sm-6 mb-2">
+                        <span class="text-muted">Win Rate:</span>
+                        <span class="badge bg-warning text-dark">
+                            <%= matchInfo[2] %>% (<%= matchInfo[0] %>/<%= matchInfo[1] %>)
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+
+                <!-- History Table -->
+                <% if (histories.length> 0) { %>
+                    <table class="table table-striped table-bordered shadow-sm">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Times</th>
+                                <th>Team</th>
+                                <th>ELO Before</th>
+                                <th>ELO Change</th>
+                                <th>ELO After</th>
+                                <th>LP Before</th>
+                                <th>LP Change</th>
+                                <th>LP After</th>
+                                <th>Rank Change</th>
+                                <th>Winner</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% histories.forEach((history, index)=> {
+                                const team = history.teamA.find(p => p.id == selectedPlayer.id) ? 'Team A' : 'Team B';
+                                const playerData = history.teamA.find(p => p.id == selectedPlayer.id) ||
+                                history.teamB.find(p => p.id == selectedPlayer.id);
+                                %>
+                                <tr>
+                                    <td>
+                                        <%= index + 1 %>
+                                    </td>
+                                    <td>
+                                        <%= history.timestamp %>
+                                    </td>
+                                    <td>
+                                        <%= team %>
+                                    </td>
+                                    <td>
+                                        <%= playerData.beforeELO %>
+                                    </td>
+                                    <td>
+                                        <span class="<%= playerData.eloChange >= 0 ? 'text-success' : 'text-danger' %>">
+                                            <%= playerData.eloChange>= 0 ? '+' : '' %><%= playerData.eloChange %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <%= playerData.afterELO %>
+                                    </td>
+                                    <td>
+                                        <%= playerData.beforeLP %>
+                                    </td>
+                                    <td>
+                                        <span class="<%= playerData.lpChange >= 0 ? 'text-success' : 'text-danger' %>">
+                                            <%= playerData.lpChange>= 0 ? '+' : '' %><%= playerData.lpChange %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <%= playerData.afterLP %>
+                                    </td>
+                                    <td>
+                                        <span class="<%= 
+                                            playerData.beforeRank < playerData.afterRank 
+                                                ? 'text-success' 
+                                                : (playerData.beforeRank > playerData.afterRank 
+                                                    ? 'text-danger' 
+                                                    : 'text-dark') 
+                                        %>">
+                                            <%= playerData.beforeRank %> → <%= playerData.afterRank %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <%= history.winner %>
+                                    </td>
+                                </tr>
+                                <% }); %>
+                        </tbody>
+                    </table>
+                    <% } else if (selectedPlayer.id) { %>
+                        <div class="alert alert-warning text-center">No match history found for this player.</div>
+                        <% } %>
+    </div>
+</body>
+
+</html>
