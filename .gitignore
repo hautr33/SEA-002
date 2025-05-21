@@ -1,19 +1,26 @@
-# Bỏ qua node_modules trong tất cả thư mục con
+# node_modules folder
 **/node_modules/
+node_modules/
 
-# Bỏ qua dist và build folder
+# dist & build folder
 **/dist/
 **/build/
+dist/
+build/
 
-# Bỏ qua file .env ở mọi nơi
+# .env file
 **/.env
+.env
 
-# Bỏ qua các file hệ thống
+# system file
 **/.DS_Store
 **/Thumbs.db
+.DS_Store
+Thumbs.db
 
-# Bỏ qua thư mục cụ thể
-projectC/temp_output/
+# specify folder or file
+Day03_Exercise
+**/example-video
 
 
 # Cocos
@@ -26,13 +33,29 @@ projectC/temp_output/
 **/simulator/
 **/native/
 **/packages/.cache/
+build/
+temp/
+local/
+library/
+jsb-link/
+jsb-adapter/
+simulator/
+native/
+packages/.cache/
 
 **/*.apk
 **/*.ipa
+*.apk
+*.ipa
 
 **/*.log
+*.log
 
 **/.vscode/
 **/.idea/
 **/.settings/
 **/*.iml
+.vscode/
+.idea/
+.settings/
+*.iml
